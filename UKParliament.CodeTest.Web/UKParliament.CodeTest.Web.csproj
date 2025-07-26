@@ -31,8 +31,6 @@
   <ItemGroup>
     <Folder Include="ClientApp\.angular\cache\18.1.2\" />
     <Folder Include="ClientApp\dist\" />
-    <Folder Include="ClientApp\src\app\components\home\dist\" />
-    <Folder Include="ClientApp\src\app\components\person.management\dist\" />
   </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
