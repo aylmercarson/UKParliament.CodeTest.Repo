@@ -1,0 +1,19 @@
+﻿namespace UKParliament.CodeTest.Core.Entities
+{
+    public class Person
+    {
+        public Guid Id { get; set; }
+
+        public required string FirstName { get; set; }
+
+        public required string LastName { get; set; }
+
+        public required string Email { get; set; }
+
+        public required string Mobile { get; set; }
+
+        public required int Department { get; set; }
+
+        public required DateTime DateOfBirth { get; set; }
+    }
+}

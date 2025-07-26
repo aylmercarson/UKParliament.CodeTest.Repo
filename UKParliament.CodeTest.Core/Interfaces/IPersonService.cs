@@ -1,0 +1,33 @@
+﻿using UKParliament.CodeTest.Core.Dtos;
+using UKParliament.CodeTest.Core.Entities;
+
+namespace UKParliament.CodeTest.Core.Interfaces
+{
+    public interface IPersonService
+    {
+        public Task<PersonDto> GetByIdAsync(Guid id);
+
+        /// <summary>
+        /// returns a list of person dtos
+        /// </summary>
+        /// <returns></returns>
+        public Task<IEnumerable<PersonDto>> GetAllAsync();
+
+        /// <summary>
+        /// add a single person to the d/base
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
+        public Task<Person> AddAsync(PersonDto person);
+
+        /// <summary>
+        /// update a single person in the d/base
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
+        public Task<Person> UpdateAsync(PersonDto person);
+
+        public Task DeleteAsync(Guid personId);
+
+    }
+}
