@@ -5,6 +5,11 @@ namespace UKParliament.CodeTest.Core.Interfaces
 {
     public interface IPersonService
     {
+        /// <summary>
+        /// Gets a person by their ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Task<PersonDto> GetByIdAsync(Guid id);
 
         /// <summary>
@@ -27,6 +32,11 @@ namespace UKParliament.CodeTest.Core.Interfaces
         /// <returns></returns>
         public Task<Person> UpdateAsync(PersonDto person);
 
+        /// <summary>
+        /// Deletes a person by their ID.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <returns></returns>
         public Task DeleteAsync(Guid personId);
 
     }
