@@ -123,7 +123,6 @@ addPerson(person:PersonViewModel){
         this.notificationService.showNotification("Person added.", "Close", 'success-snackbar');
       },  
       error: (err) => {
-        console.log(err.error);
         this.notificationService.showNotification(err.error, "Close", 'error-snackbar');
       }
   });
@@ -139,7 +138,6 @@ updatePerson(person:PersonViewModel){
         this.notificationService.showNotification("Person updated.", "Close", 'success-snackbar');
       },  
       error: (err) => {
-        console.log(err);
           this.notificationService.showNotification("Error updating person details.", "Close", 'error-snackbar');
       }
   });
@@ -153,7 +151,6 @@ selectPerson(personId: string){
           this.form.patchValue(person);
         },  
         error: (err) => {
-          console.log(err);
             this.notificationService.showNotification("Error retrieving person details.", "Close", 'error-snackbar');
         }
     });
@@ -218,7 +215,7 @@ get mobile() {
 
 get department() {
   return this.form.get('department');
-}
+ }
 }
 
 

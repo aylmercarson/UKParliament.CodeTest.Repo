@@ -28,7 +28,7 @@ public class PersonManagerContext : DbContext
             );
     }
 
-    public DbSet<Person> People { get; set; }
+    public DbSet<Person> People { get; set; } = null!;
 
-    public DbSet<Department> Departments { get; set; }
+    public DbSet<Department> Departments { get; set; } = null!;
 }
