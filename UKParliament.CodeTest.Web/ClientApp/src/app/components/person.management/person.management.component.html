@@ -137,6 +137,16 @@
                             Please enter a valid first name
                           </mat-error>
                           }
+                          @if(firstName!.hasError('minlength') && firstName!.touched){
+                          <mat-error>
+                            Minimum length is 3 characters
+                          </mat-error>
+                          }
+                          @if(firstName!.hasError('maxlength') && firstName!.touched){
+                          <mat-error>
+                            Maximum length is 20 characters
+                          </mat-error>
+                          }
                         </mat-form-field>
                     </div>
 
@@ -154,6 +164,16 @@
                           @if(lastName!.hasError('required') && lastName!.touched){
                           <mat-error>
                             Please enter a valid last name
+                          </mat-error>
+                          }
+                          @if(lastName!.hasError('minlength') && lastName!.touched){
+                          <mat-error>
+                            Minimum length is 3 characters
+                          </mat-error>
+                          }
+                          @if(lastName!.hasError('maxlength') && lastName!.touched){
+                          <mat-error>
+                            Maximum length is 20 characters
                           </mat-error>
                           }
                         </mat-form-field>
@@ -176,6 +196,11 @@
                             Please enter a valid email
                           </mat-error>
                           }
+                          @if(email!.hasError('maxlength') && email!.touched){
+                          <mat-error>
+                            Maximum length is 35 characters
+                          </mat-error>
+                          }
                         </mat-form-field>
                     </div>
 
@@ -195,6 +220,16 @@
                             Please enter a valid mobile number
                           </mat-error>
                           }
+                          @if(mobile!.hasError('minlength') && mobile!.touched){
+                          <mat-error>
+                            Minimum length is 10 characters
+                          </mat-error>
+                          }
+                          @if(mobile!.hasError('maxlength') && mobile!.touched){
+                          <mat-error>
+                            Maximum length is 15 characters
+                          </mat-error>
+                          }
                         </mat-form-field>
                     </div>
 
@@ -202,7 +237,7 @@
                         <mat-label id="dateOfBirth">Date Of Birth</mat-label>
                         <mat-form-field appearance="outline"
                                         class="w-full">
-                          <input readonly="true"
+                          <input readonly
                                  aria-label="date Of Birth"
                                  matInput
                                  [matDatepicker]="picker"
