@@ -15,6 +15,7 @@ import { PersonViewModel } from "src/app/models/person-view-model";
 import { NotificationService } from "src/app/services/notification.service";
 import { DeleteconfirmationdialogComponent } from "src/app/dialogs/deleteconfirmationdialog/deleteconfirmationdialog.component";
 import { MatLuxonDateModule } from "@angular/material-luxon-adapter";
+import { SelectionModel } from "@angular/cdk/collections";
 
 @Component({
   selector: 'app-users',
@@ -36,7 +37,7 @@ import { MatLuxonDateModule } from "@angular/material-luxon-adapter";
                 }
 
                 @screen lg {
-                    grid-template-columns: 10% 10% 10% 16% 16% 10% 2% 2%;
+                    grid-template-columns: 2% 10% 10% 10% 16% 16% 10% 2% 2%;
                 }
             }
         `,
@@ -45,175 +46,179 @@ import { MatLuxonDateModule } from "@angular/material-luxon-adapter";
 })
 export class PersonManagementComponent implements OnInit
 {
-    personStore = inject(PersonStore);
-    personService = inject(PersonService);
-    departmentStore = inject(DepartmentStore);
-    notificationService = inject(NotificationService);
-    readonly dialog = inject(MatDialog);
-    selectedPersonId: string = '';
-    form!: FormGroup;
+  personStore = inject(PersonStore);
+  personService = inject(PersonService);
+  departmentStore = inject(DepartmentStore);
+  notificationService = inject(NotificationService);
+  readonly dialog = inject(MatDialog);
 
-    isLoading: boolean = false;
+  selectedPersonId: string = '';
+  selectedPerson = new SelectionModel<PersonViewModel>(false, []);
 
-    ngOnInit(): void
-    {
-      this.buildForm();
-    }
+  form!: FormGroup;
 
-    deletePerson(personId: string, name: string): void
-    {
-      // Open the confirmation dialog
-      const dialogConfig = new MatDialogConfig();
+  isLoading: boolean = false;
 
-      // Configure the dialog options
-      dialogConfig.disableClose = true; // Prevents closing the dialog by clicking outside
-      dialogConfig.autoFocus = false;   // Disable autofocus to manually control focus
-      dialogConfig.width = '30%';       // Set the width of the dialog
-      dialogConfig.data = { name: name }; // Pass data to the dialog component
-      const dialogRef = this.dialog.open(DeleteconfirmationdialogComponent, dialogConfig)
-      .afterClosed()
-      .subscribe((confirm: boolean) => {
-          if (confirm) {
-            this.personService.deletePerson(personId)
-            .subscribe({  
-              next: (x) => {
-                this.personStore.loadUsers();
-                this.form.reset();
-                this.notificationService.showNotification("Person deleted.", "Close", 'success-snackbar');
-              },  
-              error: (err) => {
-                this.notificationService.showNotification("Error deleting person.", "Close", 'error-snackbar');
-              },
-              complete: () =>
-              {
-                this.selectedPersonId = '';
-              }
-          });
-        }
-        else{
-          this.form.reset();
-          this.selectedPersonId = '';
-        }
-    });
+  ngOnInit(): void
+  {
+    this.buildForm();
   }
+
+  deletePerson(personId: string, name: string): void
+  {
+    // Open the confirmation dialog
+    const dialogConfig = new MatDialogConfig();
+
+    // Configure the dialog options
+    dialogConfig.disableClose = true; // Prevents closing the dialog by clicking outside
+    dialogConfig.autoFocus = false;   // Disable autofocus to manually control focus
+    dialogConfig.width = '30%';       // Set the width of the dialog
+    dialogConfig.data = { name: name }; // Pass data to the dialog component
+    const dialogRef = this.dialog.open(DeleteconfirmationdialogComponent, dialogConfig)
+    .afterClosed()
+    .subscribe((confirm: boolean) => {
+        if (confirm) {
+          this.personService.deletePerson(personId)
+          .subscribe({  
+            next: (x) => {
+              this.personStore.loadUsers();
+              this.form.reset();
+              this.notificationService.showNotification("Person deleted.", "Close", 'success-snackbar');
+            },  
+            error: (err) => {
+              this.notificationService.showNotification("Error deleting person.", "Close", 'error-snackbar');
+            },
+            complete: () =>
+            {
+              this.selectedPersonId = '';
+            }
+        });
+      }
+      else{
+        this.form.reset();
+        this.selectedPersonId = '';
+      }
+  });
+}
   
-  onSubmit(): void{
-    let person:PersonViewModel = this.form.value;
+onSubmit(): void{
+  let person:PersonViewModel = this.form.value;
 
-    if(this.selectedPersonId == ''){
-      this.addPerson(person);
-    }
-    else{
-      this.updatePerson(person);
-    }
+  if(this.selectedPersonId == ''){
+    this.addPerson(person);
+  }
+  else{
+    this.updatePerson(person);
+  }
 
-    this.selectedPersonId = '';
+  this.selectedPersonId = '';
 }
 
-  addPerson(person:PersonViewModel){
-    this.personService.addPerson(person)
-    .subscribe({  
-        next: (x) => {
-          this.personStore.loadUsers();
-          this.form.reset();
-          this.notificationService.showNotification("Person added.", "Close", 'success-snackbar');
-        },  
-        error: (err) => {
-          console.log(err.error);
-          this.notificationService.showNotification(err.error, "Close", 'error-snackbar');
-        }
-    });
-  }
+addPerson(person:PersonViewModel){
+  this.personService.addPerson(person)
+  .subscribe({  
+      next: (x) => {
+        this.personStore.loadUsers();
+        this.form.reset();
+        this.notificationService.showNotification("Person added.", "Close", 'success-snackbar');
+      },  
+      error: (err) => {
+        console.log(err.error);
+        this.notificationService.showNotification(err.error, "Close", 'error-snackbar');
+      }
+  });
+}
     
-  updatePerson(person:PersonViewModel){
-    person.id = this.selectedPersonId;
-    this.personService.updatePerson(person)
-    .subscribe({  
-        next: (x) => {
-          this.personStore.loadUsers();
-          this.form.reset();
-          this.notificationService.showNotification("Person updated.", "Close", 'success-snackbar');
+updatePerson(person:PersonViewModel){
+  person.id = this.selectedPersonId;
+  this.personService.updatePerson(person)
+  .subscribe({  
+      next: (x) => {
+        this.personStore.loadUsers();
+        this.form.reset();
+        this.notificationService.showNotification("Person updated.", "Close", 'success-snackbar');
+      },  
+      error: (err) => {
+        console.log(err);
+          this.notificationService.showNotification("Error updating person details.", "Close", 'error-snackbar');
+      }
+  });
+}
+
+selectPerson(personId: string){
+    this.selectedPersonId = personId;
+      this.personService.getPersonById(personId)
+        .subscribe({  
+        next: (person) => {
+          this.form.patchValue(person);
         },  
         error: (err) => {
           console.log(err);
-            this.notificationService.showNotification("Error updating person details.", "Close", 'error-snackbar');
+            this.notificationService.showNotification("Error retrieving person details.", "Close", 'error-snackbar');
         }
     });
   }
 
-  selectPerson(personId: string){
-      this.selectedPersonId = personId;
-       this.personService.getPersonById(personId)
-          .subscribe({  
-          next: (person) => {
-            this.form.patchValue(person);
-          },  
-          error: (err) => {
-            console.log(err);
-              this.notificationService.showNotification("Error retrieving person details.", "Close", 'error-snackbar');
-          }
-      });
-    }
+cancel(): void{
+  this.selectedPerson.clear();
+  this.selectedPersonId = '';
+  this.form.reset();
+}
 
-  cancel(): void{
-    this.selectedPersonId = '';
-    this.form.reset();
-  }
-
-  buildForm(): void{
-    this.form =  new FormGroup({
-        firstName    : new FormControl('',[
-            Validators.required,
-            Validators.minLength(3),
-            Validators.maxLength(20)
-          ]),
-        lastName   : new FormControl('',[
-            Validators.required,
-            Validators.minLength(3),
-            Validators.maxLength(20)
-          ]),
-        email   : new FormControl('',[
-            Validators.required,
-            Validators.maxLength(35),
-            Validators.email
-          ]),
-        dateOfBirth   : new FormControl('',[
-            Validators.required
-          ]),
-        mobile : new FormControl('',[
-            Validators.required,
-            Validators.minLength(10),
-            Validators.maxLength(15)
+buildForm(): void{
+  this.form =  new FormGroup({
+      firstName    : new FormControl('',[
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(20)
         ]),
-        department : new FormControl('',[
-            Validators.required
+      lastName   : new FormControl('',[
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(20)
         ]),
-    });
-  }
+      email   : new FormControl('',[
+          Validators.required,
+          Validators.maxLength(35),
+          Validators.email
+        ]),
+      dateOfBirth   : new FormControl('',[
+          Validators.required
+        ]),
+      mobile : new FormControl('',[
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(15)
+      ]),
+      department : new FormControl('',[
+          Validators.required
+      ]),
+  });
+}
 
-  get firstName() {
-    return this.form.get('firstName');
-  }
+get firstName() {
+  return this.form.get('firstName');
+}
 
-  get lastName() {
-    return this.form.get('lastName');
-  }
+get lastName() {
+  return this.form.get('lastName');
+}
 
-  get email() {
-    return this.form.get('email');
-  }
+get email() {
+  return this.form.get('email');
+}
 
-  get dateOfBirth() {
-    return this.form.get('dateOfBirth');
-  }
+get dateOfBirth() {
+  return this.form.get('dateOfBirth');
+}
 
-  get mobile() {
-    return this.form.get('mobile');
-  }
+get mobile() {
+  return this.form.get('mobile');
+}
 
-  get department() {
-    return this.form.get('department');
-  }
+get department() {
+  return this.form.get('department');
+}
 }
 
 

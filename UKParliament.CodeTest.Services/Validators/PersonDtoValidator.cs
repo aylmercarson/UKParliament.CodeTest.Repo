@@ -24,7 +24,7 @@ namespace UKParliament.CodeTest.Web.Validators
                 .MaximumLength(35)
                 .EmailAddress();
 
-            RuleFor(p => p.DateOfBirth)
+            RuleFor(person => person.DateOfBirth)
                 .Must(BeAReasonableDateOfBirth)
                 .WithMessage("Invalid Date Of Birth");
 
