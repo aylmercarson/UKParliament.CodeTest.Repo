@@ -21,14 +21,19 @@ namespace UKParliament.CodeTest.Web.Validators
 
             RuleFor(person => person.Email)
                 .NotNull()
+                .MaximumLength(35)
                 .EmailAddress();
 
             RuleFor(p => p.DateOfBirth)
                 .Must(BeAReasonableDateOfBirth)
-                .WithMessage("Invalid {PropertyName}");
+                .WithMessage("Invalid Date Of Birth");
+
+            RuleFor(person => person.Department)
+                .NotNull()
+                .InclusiveBetween(1, 4);
         }
 
-        protected bool BeAReasonableDateOfBirth(DateTime date)
+        private bool BeAReasonableDateOfBirth(DateTime date)
         {
             int currentYear = DateTime.Now.Year;
             int dobYear = date.Year;
