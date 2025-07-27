@@ -123,98 +123,122 @@
                     <div class="mb-1">
                         <mat-label>First Name</mat-label>
                         <mat-form-field appearance="outline"
-                            class="w-full">
-                            <input matInput
-                                type="text"
-                                title="First Name"
-                                aria-label="first Name"
-                                formControlName="firstName"
-                                placeholder="First name"
-                                required> 
-                                <mat-hint>(3-20 chars)</mat-hint>
+                                        class="w-full">
+                          <input matInput
+                                 type="text"
+                                 title="First Name"
+                                 aria-label="first Name"
+                                 formControlName="firstName"
+                                 placeholder="First name"
+                                 required>
+                          <mat-hint>(3-20 chars)</mat-hint>
+                          @if(firstName!.hasError('required') && firstName!.touched){
+                          <mat-error>
+                            Please enter a valid first name
+                          </mat-error>
+                          }
                         </mat-form-field>
                     </div>
 
                     <div class="mb-1">
                         <mat-label>Last Name</mat-label>
                         <mat-form-field appearance="outline"
-                            class="w-full">
-                            <input
-                                type="text"
-                                title="Last Name"
-                                aria-label="last Name"
-                                formControlName="lastName"
-                                placeholder="Last name"
-                                matInput>
-                                <mat-hint>(3-20 chars)</mat-hint>
+                                        class="w-full">
+                          <input type="text"
+                                 title="Last Name"
+                                 aria-label="last Name"
+                                 formControlName="lastName"
+                                 placeholder="Last name"
+                                 matInput>
+                          <mat-hint>(3-20 chars)</mat-hint>
+                          @if(lastName!.hasError('required') && lastName!.touched){
+                          <mat-error>
+                            Please enter a valid last name
+                          </mat-error>
+                          }
                         </mat-form-field>
                     </div>
 
                     <div class="mb-2">
                         <mat-label id="email">Email</mat-label>
                         <mat-form-field appearance="outline"
-                            class="w-full">
-                            <input
-                                type="email"
-                                title="Email"
-                                aria-label="email"
-                                matInput
-                                required
-                                formControlName="email"
-                                placeholder="Email">
-                                <mat-hint>(max 35 chars)</mat-hint>
+                                        class="w-full">
+                          <input type="email"
+                                 title="Email"
+                                 aria-label="email"
+                                 matInput
+                                 required
+                                 formControlName="email"
+                                 placeholder="Email">
+                          <mat-hint>(max 35 chars)</mat-hint>
+                          @if((email!.hasError('email') || email!.hasError('required')) && email!.touched){
+                          <mat-error>
+                            Please enter a valid email
+                          </mat-error>
+                          }
                         </mat-form-field>
                     </div>
 
                     <div class="mb-2">
                         <mat-label id="mobile">Mobile</mat-label>
                         <mat-form-field appearance="outline"
-                            class="w-full">
-                            <input
-                                type="tel"
-                                aria-label="mobile"
-                                matInput
-                                required
-                                formControlName="mobile"
-                                placeholder="Mobile number">
-                            <mat-hint>(10-15 chars. Can include spaces)</mat-hint>
+                                        class="w-full">
+                          <input type="tel"
+                                 aria-label="mobile"
+                                 matInput
+                                 required
+                                 formControlName="mobile"
+                                 placeholder="Mobile number">
+                          <mat-hint>(10-15 chars. Can include spaces)</mat-hint>
+                          @if(mobile!.hasError('required') && mobile!.touched){
+                          <mat-error>
+                            Please enter a valid mobile number
+                          </mat-error>
+                          }
                         </mat-form-field>
                     </div>
 
                     <div class="mb-2">
                         <mat-label id="dateOfBirth">Date Of Birth</mat-label>
                         <mat-form-field appearance="outline"
-                            class="w-full">
-                            <input
-                                readonly="true"
-                                aria-label="date Of Birth"
-                                matInput
-                                [matDatepicker]="picker"
-                                required
-                                formControlName="dateOfBirth"
-                                placeholder="Date of Birth">
-                            <mat-datepicker-toggle matIconSuffix
-                                [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
+                                        class="w-full">
+                          <input readonly="true"
+                                 aria-label="date Of Birth"
+                                 matInput
+                                 [matDatepicker]="picker"
+                                 required
+                                 formControlName="dateOfBirth"
+                                 placeholder="Date of Birth">
+                          <mat-datepicker-toggle matIconSuffix
+                                                 [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                          @if(dateOfBirth!.hasError('required') && dateOfBirth!.touched){
+                          <mat-error>
+                            Please select a valid date of birth
+                          </mat-error>
+                          }
                         </mat-form-field>
                     </div>
 
                     <div class="mb-2">
                         <mat-label id="department">Department</mat-label>
                         <mat-form-field appearance="outline"
-                            class="w-full">
-                            <mat-icon
-                                class="icon-size-5"
-                                matPrefix></mat-icon>
-                            <mat-select formControlName="department" 
-                                placeholder="Select Department"
-                                aria-label="department">
-                                @for (u of departmentStore.entities(); track
-                                u.id) {
-                                <mat-option
-                                    [value]="u.id">{{u.name}}</mat-option>
-                                }
-                            </mat-select>
+                                        class="w-full">
+                          <mat-icon class="icon-size-5"
+                                    matPrefix></mat-icon>
+                          <mat-select formControlName="department"
+                                      placeholder="Select Department"
+                                      aria-label="department">
+                            @for (u of departmentStore.entities(); track
+                            u.id) {
+                            <mat-option [value]="u.id">{{u.name}}</mat-option>
+                            }
+                          </mat-select>
+                          @if(department!.hasError('required') && department!.touched){
+                          <mat-error>
+                            Please select a department
+                          </mat-error>
+                          }
                         </mat-form-field>
                     </div>
 

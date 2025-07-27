@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, inject } from "@angular/cor
 import { PersonStore } from "src/app/stores/person.store";
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -189,6 +189,30 @@ export class PersonManagementComponent implements OnInit
             Validators.required
         ]),
     });
+  }
+
+  get firstName() {
+    return this.form.get('firstName');
+  }
+
+  get lastName() {
+    return this.form.get('lastName');
+  }
+
+  get email() {
+    return this.form.get('email');
+  }
+
+  get dateOfBirth() {
+    return this.form.get('dateOfBirth');
+  }
+
+  get mobile() {
+    return this.form.get('mobile');
+  }
+
+  get department() {
+    return this.form.get('department');
   }
 }
 
