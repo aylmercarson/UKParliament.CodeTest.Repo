@@ -18,7 +18,8 @@ public class PersonManagerContext : DbContext
             new Department { Id = 1, Name = "Sales" },
             new Department { Id = 2, Name = "Marketing" },
             new Department { Id = 3, Name = "Finance" },
-            new Department { Id = 4, Name = "HR" });
+            new Department { Id = 4, Name = "HR" }
+            );
 
         modelBuilder.Entity<Person>().HasData(
             new Person { Id = Guid.NewGuid(), FirstName = "Fred", LastName = "Flintstone", Email = "fred@bedrock.com", Mobile = "07 123 123 444", DateOfBirth = new DateTime(1980, 1, 4), Department = 4 },

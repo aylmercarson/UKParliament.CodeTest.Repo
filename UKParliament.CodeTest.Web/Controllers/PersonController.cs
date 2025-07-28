@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using UKParliament.CodeTest.Core.Dtos;
 using UKParliament.CodeTest.Core.Interfaces;
 
@@ -9,10 +10,14 @@ namespace UKParliament.CodeTest.Web.Controllers;
 public class PersonController : ControllerBase
 {
     private readonly IPersonService _iPersonService;
+    private readonly IValidator<PersonDto> _validator;
 
-    public PersonController(IPersonService iPersonService)
+    public PersonController(
+        IPersonService iPersonService, 
+        IValidator<PersonDto> validator)
     {
         _iPersonService = iPersonService;
+        _validator = validator ?? throw new ArgumentNullException(nameof(validator));
     }
 
     [Route("{personId:Guid}")]
@@ -53,11 +58,22 @@ public class PersonController : ControllerBase
 
     [Route("add")]
     [HttpPost]
-    public async Task<ActionResult<PersonDto>> Add(PersonDto personViewModel)
+    public async Task<ActionResult<PersonDto>> Add(PersonDto personDto)
     {
         try
         {
-            var person = await _iPersonService.AddAsync(personViewModel);
+            ArgumentNullException.ThrowIfNull(personDto);
+
+            // Validate the person using FluentValidation
+            var validationResult = await _validator.ValidateAsync(personDto);
+
+            if (!validationResult.IsValid)
+            {
+                // Handle validation errors
+                throw new ValidationException(validationResult.Errors);
+            }
+
+            var person = await _iPersonService.AddAsync(personDto);
 
             return StatusCode(StatusCodes.Status200OK, person);
         }
@@ -75,9 +91,20 @@ public class PersonController : ControllerBase
     {
         try
         {
+            ArgumentNullException.ThrowIfNull(personDto);
+
+            // Validate the person using FluentValidation
+            var validationResult = await _validator.ValidateAsync(personDto);
+
+            if (!validationResult.IsValid)
+            {
+                // Handle validation errors
+                throw new ValidationException(validationResult.Errors);
+            }
+
             var person = await _iPersonService.UpdateAsync(personDto);
 
-            return base.StatusCode(StatusCodes.Status200OK, person);
+            return StatusCode(StatusCodes.Status200OK, person);
         }
         catch (Exception ex)
         {
@@ -95,13 +122,13 @@ public class PersonController : ControllerBase
         {
             await _iPersonService.DeleteAsync(personId);
 
-            return base.StatusCode(StatusCodes.Status200OK, true);
+            return StatusCode(StatusCodes.Status200OK, true);
         }
         catch (Exception ex)
         {
             // Log the exception (not implemented here)
 
-            return base.StatusCode(StatusCodes.Status200OK, false);
+            return StatusCode(StatusCodes.Status200OK, false);
         }
     }
 }

@@ -9,11 +9,6 @@ namespace UKParliament.CodeTest.Tests
     {
         private PersonDtoValidator dtoValidator = new PersonDtoValidator();
 
-        /*
-         * These tests are designed to validate the PersonDtoValidator class.
-         * They check that the validation rules for the PersonDto are working correctly.
-         */
-
         [Fact]
         public void Should_Pass_When_FirstName_Correct_Length()
         {
