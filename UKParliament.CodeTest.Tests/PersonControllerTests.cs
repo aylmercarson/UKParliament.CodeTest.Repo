@@ -40,11 +40,10 @@ namespace UKParliament.CodeTest.Tests
         {
             // Arrange
             var personToAdd = TestDataPersons.GetPersonDto();
-            var personReturned = TestDataPersons.GetDomainPerson();
 
             var mockService = new Mock<IPersonService>();
             mockService.Setup(service => service.AddAsync(personToAdd))
-                .ReturnsAsync(personReturned);
+                .ReturnsAsync(true);
 
             mockValidator.Setup(v => v.ValidateAsync(personToAdd, default))
                 .ReturnsAsync(new ValidationResult());
@@ -58,8 +57,8 @@ namespace UKParliament.CodeTest.Tests
 
             // Assert
             var okResult = Assert.IsType<ObjectResult>(actionResult.Result);
-            var value = Assert.IsType<Person>(okResult.Value, exactMatch: false);
-            Assert.Equal(personToAdd.FirstName, value.FirstName);
+            var value = Assert.IsType<bool>(okResult.Value);
+            Assert.True(value);
         }
 
         [Fact]
@@ -67,11 +66,10 @@ namespace UKParliament.CodeTest.Tests
         {
             // Arrange
             var personToUpdate = TestDataPersons.GetPersonDto();
-            var personReturned = TestDataPersons.GetDomainPerson();
 
             var mockService = new Mock<IPersonService>();
             mockService.Setup(service => service.UpdateAsync(personToUpdate))
-                .ReturnsAsync(personReturned);
+                .ReturnsAsync(true);
 
             mockValidator.Setup(v => v.ValidateAsync(personToUpdate, default))
                 .ReturnsAsync(new ValidationResult());
@@ -85,8 +83,8 @@ namespace UKParliament.CodeTest.Tests
 
             // Assert
             var okResult = Assert.IsType<ObjectResult>(actionResult.Result);
-            var value = Assert.IsType<Person>(okResult.Value, exactMatch: false);
-            Assert.Equal(personToUpdate.FirstName, value.FirstName);
+            var value = Assert.IsType<bool>(okResult.Value);
+            Assert.True(value);
         }
     }
 }

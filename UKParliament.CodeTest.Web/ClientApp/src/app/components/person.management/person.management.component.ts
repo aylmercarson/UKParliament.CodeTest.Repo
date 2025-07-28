@@ -86,7 +86,8 @@ export class PersonManagementComponent implements OnInit
               this.notificationService.showNotification("Person deleted.", "Close", 'success-snackbar');
             },  
             error: (err) => {
-              this.notificationService.showNotification("Error deleting person.", "Close", 'error-snackbar');
+              console.log(err);
+              this.notificationService.showNotification(err.error, "Close", 'error-snackbar');
             },
             complete: () =>
             {
@@ -138,7 +139,7 @@ updatePerson(person:PersonViewModel){
         this.notificationService.showNotification("Person updated.", "Close", 'success-snackbar');
       },  
       error: (err) => {
-          this.notificationService.showNotification("Error updating person details.", "Close", 'error-snackbar');
+          this.notificationService.showNotification(err.error, "Close", 'error-snackbar');
       }
   });
 }

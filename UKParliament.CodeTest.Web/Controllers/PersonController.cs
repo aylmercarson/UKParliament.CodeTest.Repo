@@ -63,24 +63,25 @@ public class PersonController : ControllerBase
 
     [Route("add")]
     [HttpPost]
-    public async Task<ActionResult<PersonDto>> Add(PersonDto personDto)
+    public async Task<ActionResult<bool>> Add(PersonDto personDto)
     {
         try
         {
-            ArgumentNullException.ThrowIfNull(personDto);
-
-            // Validate the person using FluentValidation
             var validationResult = await _validator.ValidateAsync(personDto);
 
             if (!validationResult.IsValid)
             {
-                // Handle validation errors
                 throw new ValidationException(validationResult.Errors);
             }
 
-            var person = await _iPersonService.AddAsync(personDto);
-
-            return StatusCode(StatusCodes.Status200OK, person);
+            if(await _iPersonService.AddAsync(personDto))
+            {
+                return StatusCode(StatusCodes.Status201Created, true);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to add person.");
+            }
         }
         catch (Exception ex)
         {
@@ -92,24 +93,31 @@ public class PersonController : ControllerBase
 
     [Route("update")]
     [HttpPut]
-    public async Task<ActionResult<PersonDto>> Update(PersonDto personDto)
+    public async Task<ActionResult<bool>> Update(PersonDto personDto)
     {
         try
         {
-            ArgumentNullException.ThrowIfNull(personDto);
-
-            // Validate the person using FluentValidation
             var validationResult = await _validator.ValidateAsync(personDto);
 
             if (!validationResult.IsValid)
             {
-                // Handle validation errors
                 throw new ValidationException(validationResult.Errors);
             }
 
-            var person = await _iPersonService.UpdateAsync(personDto);
+            if (await _iPersonService.UpdateAsync(personDto))
+            {
+                return StatusCode(StatusCodes.Status200OK, true);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error updating person.");
+            }
+        }
+        catch (KeyNotFoundException ex)
+        {
+            // Log the exception (not implemented here)
 
-            return StatusCode(StatusCodes.Status200OK, person);
+            return StatusCode(StatusCodes.Status404NotFound, ex.Message);
         }
         catch (Exception ex)
         {
@@ -129,11 +137,17 @@ public class PersonController : ControllerBase
 
             return StatusCode(StatusCodes.Status200OK, true);
         }
+        catch (KeyNotFoundException ex)
+        {
+            // Log the exception (not implemented here)
+
+            return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+        }
         catch (Exception ex)
         {
             // Log the exception (not implemented here)
 
-            return StatusCode(StatusCodes.Status200OK, false);
+            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
         }
     }
 }

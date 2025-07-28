@@ -26,28 +26,42 @@ namespace UKParliament.CodeTest.Data
 
         public async Task<IEnumerable<Person>> GetAllAsync() => await _context.People.ToListAsync();
 
-        public async Task<Person> AddAsync(Person person)
+        public async Task<bool> AddAsync(Person person)
         {
             _context.People.Add(person);
-            await _context.SaveChangesAsync();
-            return person;
+            var result = await _context.SaveChangesAsync();
+            return result == 1;
         }
 
-        public async Task<Person> UpdateAsync(Person person)
+        public async Task<bool> UpdateAsync(Person person)
         {
+            var personToBeUpdated = await _context.People.FindAsync(person.Id);
+
+            if (personToBeUpdated == null)
+            {
+                throw new KeyNotFoundException($"Person with Id {person.Id} not found.");
+            }
+
             _context.People.Update(person); 
             _context.Entry(person).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return person;
+            var result = await _context.SaveChangesAsync();
+            return result == 1;
         }
 
-        public async Task DeleteAsync(Guid personId)
+        public async Task<bool> DeleteAsync(Guid personId)
         {
             var person = await _context.People.FindAsync(personId);
 
+            if (person == null)
+            {
+                throw new KeyNotFoundException($"Person with Id {personId} not found.");
+            }
+
             _context.People.Remove(person);
 
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
+
+            return result == 1;
         }
     }
 }

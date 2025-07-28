@@ -1,5 +1,4 @@
 ﻿using UKParliament.CodeTest.Core.Dtos;
-using UKParliament.CodeTest.Core.Entities;
 using UKParliament.CodeTest.Core.Interfaces;
 
 namespace UKParliament.CodeTest.Services;
@@ -32,18 +31,16 @@ public class PersonService : IPersonService
         return _iPersonMapper.ToDto(person);
     }
 
-    public async Task<Person> AddAsync(PersonDto personDto)
+    public async Task<bool> AddAsync(PersonDto personDto)
     {
         var person = _iPersonMapper.ToEntity(personDto);
 
         if (person == null) throw new ArgumentNullException(nameof(person));
 
-        var addedPerson = await _iPersonRepository.AddAsync(person);
-
-        return addedPerson;
+        return await _iPersonRepository.AddAsync(person);
     }
 
-    public async Task<Person> UpdateAsync(PersonDto personDto)
+    public async Task<bool> UpdateAsync(PersonDto personDto)
     {
         var person = _iPersonMapper.ToEntity(personDto);
 
@@ -52,8 +49,8 @@ public class PersonService : IPersonService
         return await _iPersonRepository.UpdateAsync(person);
     }
 
-    public async Task DeleteAsync(Guid personId)
+    public async Task<bool> DeleteAsync(Guid personId)
     {
-        await _iPersonRepository.DeleteAsync(personId);
+        return await _iPersonRepository.DeleteAsync(personId);
     }
 }

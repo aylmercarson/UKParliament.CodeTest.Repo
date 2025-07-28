@@ -22,20 +22,20 @@ namespace UKParliament.CodeTest.Core.Interfaces
         /// </summary>
         /// <param name="person"></param>
         /// <returns></returns>
-        public Task<Person> AddAsync(Person person);
+        public Task<bool> AddAsync(Person person);
 
         /// <summary>
         /// Updates an existing person.
         /// </summary>
         /// <param name="person"></param>
         /// <returns></returns>
-        public Task<Person> UpdateAsync(Person person);
+        public Task<bool> UpdateAsync(Person person);
 
         /// <summary>
         /// Deletes a person by their ID.
         /// </summary>
         /// <param name="personId"></param>
         /// <returns></returns>
-        public Task DeleteAsync(Guid personId);
+        public Task<bool> DeleteAsync(Guid personId);
     }
 }
