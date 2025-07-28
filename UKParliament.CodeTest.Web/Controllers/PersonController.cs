@@ -28,6 +28,11 @@ public class PersonController : ControllerBase
         {
             var personDto = await _iPersonService.GetByIdAsync(personId);
 
+            if (null == personDto)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, $"Person with ID {personId} not found.");
+            }
+
             return StatusCode(StatusCodes.Status200OK, personDto);
         }
         catch (Exception ex)

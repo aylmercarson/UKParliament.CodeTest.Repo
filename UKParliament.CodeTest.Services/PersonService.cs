@@ -36,6 +36,8 @@ public class PersonService : IPersonService
     {
         var person = _iPersonMapper.ToEntity(personDto);
 
+        if (person == null) throw new ArgumentNullException(nameof(person));
+
         var addedPerson = await _iPersonRepository.AddAsync(person);
 
         return addedPerson;

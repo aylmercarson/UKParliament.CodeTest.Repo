@@ -28,8 +28,6 @@ namespace UKParliament.CodeTest.Data
 
         public async Task<Person> AddAsync(Person person)
         {
-            if (person == null) throw new ArgumentNullException(nameof(person));
-
             _context.People.Add(person);
             await _context.SaveChangesAsync();
             return person;
@@ -37,7 +35,6 @@ namespace UKParliament.CodeTest.Data
 
         public async Task<Person> UpdateAsync(Person person)
         {
-            if (person == null) throw new ArgumentNullException(nameof(person));
             _context.People.Update(person); 
             _context.Entry(person).State = EntityState.Modified;
             await _context.SaveChangesAsync();
